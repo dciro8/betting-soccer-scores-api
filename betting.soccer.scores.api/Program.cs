@@ -6,6 +6,8 @@ using betting.soccer.scores.api.Infraestructure;
 using betting.soccer.scores.api.Mediators.UserService.UserPage;
 using betting.soccer.scores.api.Domains.SoccerTeamService.SoccerTeamPage;
 using betting.soccer.scores.api.Utilities;
+using betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage;
+using betting.soccer.scores.api.Mediators.SoccerGameService.SoccerGamePage;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,8 +34,12 @@ DataContext _context;
     // configure DI for application services
     services.AddScoped<IJwtUtils, JwtUtils>();
     services.AddScoped<SoccerTeamProcessor>();
+    services.AddScoped<ISoccerGame, SoccerGameMediator>();
+    services.AddScoped<IRegisterSoccerGame, SoccerGameMediator>();
+
+    services.AddScoped<SoccerGameProcessor>();
     services.AddScoped<IRegisterSoccerTeam, SoccerTeamMediator>();
-    services.AddTransient<IGetAuthorizeSoccerGame, SoccerTeamMediator>();
+    services.AddTransient<ISoccerTeam, SoccerTeamMediator>();
     services.AddScoped<IGetSoccerTeam, SoccerTeamMediator>();
 }
 

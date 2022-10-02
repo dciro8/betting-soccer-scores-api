@@ -11,14 +11,15 @@ namespace betting.soccer.scores.api.Domains.UserService.AuthorizationEntity
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context, IGetAuthorizeSoccerGame userService, IJwtUtils jwtUtils)
+        public async Task Invoke(HttpContext context, ISoccerTeam userService, IJwtUtils jwtUtils)
         {
             var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ")?.Last();
-            var userId = jwtUtils.ValidateToken(token);
-            if (userId != null)
+            var soccerTeamId = jwtUtils.ValidateToken(token);
+            if (soccerTeamId != null)
             {
+                //TODO: Ver tarea
                 // attach user to context on successful jwt validation
-                context.Items["User"] = userService.GetByIdSoccerGameAsync(userId.Value);
+                context.Items["User"] = userService.GetByIdSoccerTeamAsync(soccerTeamId.Value);
             }
 
             await _next(context);

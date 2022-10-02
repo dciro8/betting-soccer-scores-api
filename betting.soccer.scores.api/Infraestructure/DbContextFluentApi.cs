@@ -1,4 +1,5 @@
-﻿using bettingsoccerscoresapi.Domains.SoccerTeamService.SoccerTeamPage;
+﻿
+using betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage;
 using bettingsoccerscoresapi.Domains.UserService.UserPage;
 using Microsoft.EntityFrameworkCore;
 using System;

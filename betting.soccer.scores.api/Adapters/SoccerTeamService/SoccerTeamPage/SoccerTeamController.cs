@@ -1,4 +1,6 @@
-﻿using betting.soccer.scores.api.Domains.SoccerTeamService.SoccerTeamPage;
+﻿using betting.soccer.scores.api.Domains.Generic;
+using betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage;
+using betting.soccer.scores.api.Domains.SoccerTeamService.SoccerTeamPage;
 using betting.soccer.scores.api.Domains.UserService.UserPage;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,14 +26,14 @@ namespace betting.soccer.scores.api.Adapters.UserService.UserPage
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IList<SoccerGameRegisterResponse>>> GetAllSoccerGameAsync()
+        public async Task<ActionResult<IList<SoccerGameResponse>>> GetAllSoccerGameAsync()
         {
             var soccerTeams = await _soccerTeamProcessor.GetAllSoccerGameAsync();
             return Ok(soccerTeams);
         }
         
         [HttpPost()]
-        public async Task<ActionResult<SoccerTeamStateResponse>> RegisterSoccerTeamAsync(SoccerTeamRegisterRequest model)
+        public async Task<ActionResult<SoccerTeamStateResponse>> RegisterSoccerTeamAsync(SoccerTeamResponse model)
         {
             var response = await _soccerTeamProcessor.RegisterSoccerTeamAsync(model);
             return Ok(response);

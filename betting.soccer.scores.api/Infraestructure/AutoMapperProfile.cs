@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage;
 using betting.soccer.scores.api.Domains.SoccerTeamService.SoccerTeamPage;
-using bettingsoccerscoresapi.Domains.SoccerTeamService.SoccerTeamPage;
 using bettingsoccerscoresapi.Domains.UserService.UserPage;
 
 namespace betting.soccer.scores.api.Infraestructure
@@ -10,16 +10,16 @@ namespace betting.soccer.scores.api.Infraestructure
         public AutoMapperProfile()
         {
             // SoccerTeam 
-            CreateMap<SoccerTeam, SoccerTeamRegisterRequest>();
+            CreateMap<SoccerTeam, SoccerTeamResponse>();
 
             // SoccerTeam
-            CreateMap<SoccerTeamRegisterRequest, SoccerTeam>();
+            CreateMap<SoccerTeamResponse, SoccerTeam>();
 
-            CreateMap<SoccerGame, SoccerGameRegisterResponse>();
-            CreateMap<SoccerGameRegisterResponse, SoccerGame>();
+            CreateMap<SoccerGame, SoccerGameResponse>();
+            CreateMap<SoccerGameResponse, SoccerGame>();
 
             // UpdateRequest -> SoccerGame
-            CreateMap<SoccerGameRegisterResponse, SoccerGame>()
+            CreateMap<SoccerGameResponse, SoccerGame>()
                 .ForAllMembers(x => x.Condition(
                     (src, dest, prop) =>
                     {

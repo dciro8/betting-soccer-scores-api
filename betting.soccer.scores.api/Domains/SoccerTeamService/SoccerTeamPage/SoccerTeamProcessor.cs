@@ -3,7 +3,7 @@ using bettingsoccerscoresapi.Domains.UserService.UserPage;
 using betting.soccer.scores.api.Domains.UserService.AuthorizationEntity;
 using betting.soccer.scores.api.Infraestructure;
 using betting.soccer.scores.api.Domains.SoccerTeamService.SoccerTeamPage;
-using bettingsoccerscoresapi.Domains.SoccerTeamService.SoccerTeamPage;
+using betting.soccer.scores.api.Domains.Generic;
 
 namespace betting.soccer.scores.api.Domains.UserService.UserPage
 {
@@ -13,23 +13,23 @@ namespace betting.soccer.scores.api.Domains.UserService.UserPage
         private readonly IJwtUtils _jwtUtils;
         private readonly IRegisterSoccerTeam _registerSoccerTeam;
         private readonly IGetSoccerTeam _getSoccerTeam;
-        private readonly IGetAuthorizeSoccerGame _getAuthorizeSoccerGame;
+        private readonly ISoccerTeam _getAuthorizeSoccerTeam;
 
         public SoccerTeamProcessor(
             IMapper mapper,
             IJwtUtils jwtUtils,
             IRegisterSoccerTeam registerSoccerTeam,
             IGetSoccerTeam SoccerTeam,
-            IGetAuthorizeSoccerGame getAuthorizeUser
+            ISoccerTeam getAuthorizeTeam
             )
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _jwtUtils = jwtUtils ?? throw new ArgumentNullException(nameof(jwtUtils));
             _registerSoccerTeam = registerSoccerTeam ?? throw new ArgumentNullException(nameof(registerSoccerTeam));
             _getSoccerTeam = SoccerTeam ?? throw new ArgumentNullException(nameof(SoccerTeam));
-            _getAuthorizeSoccerGame = getAuthorizeUser ?? throw new ArgumentNullException(nameof(getAuthorizeUser));
+            _getAuthorizeSoccerTeam = getAuthorizeTeam ?? throw new ArgumentNullException(nameof(getAuthorizeTeam));
         }
-        public async Task<SoccerTeamStateResponse> RegisterSoccerTeamAsync(SoccerTeamRegisterRequest model)
+        public async Task<SoccerTeamStateResponse> RegisterSoccerTeamAsync(SoccerTeamResponse model)
         {
             try
             {
@@ -51,57 +51,10 @@ namespace betting.soccer.scores.api.Domains.UserService.UserPage
                 };
             }
         }
-        public async Task<SoccerTeamStateResponse> RegisterSoccerGameAsync(SoccerGameRegisterResponse model)
-        {
-            try
-            {
-                var soccerTeam = _mapper.Map<SoccerGame>(model);
-                var items = await _registerSoccerTeam.RegisterSoccerGameAsync(soccerTeam);
-
-                return new SoccerTeamStateResponse
-                {
-                    Id = soccerTeam.Id,
-                    Items = items,
-                    Message = "Registration successful"
-                };
-            }
-            catch (Exception ex)
-            {
-                return new SoccerTeamStateResponse
-                {
-                    Message = ex.GetBaseException().Message
-                };
-            }
-        }
-        public async Task<SoccerTeamStateResponse> UpdateAsync(Guid id, SoccerGameRegisterResponse model)
-        {
-            var currentSoccerGame = await GetSoccerGameAsync(id);
-            _mapper.Map(model, currentSoccerGame);
-
-            var items = await _getAuthorizeSoccerGame.UpdateAsync(currentSoccerGame); 
-            return new SoccerTeamStateResponse
-            {
-                Id = currentSoccerGame.Id,
-                Items = items,
-                Message = "Soccer game updated successfully"
-            };
-        }
-        public async Task<SoccerTeamStateResponse> DeleteSoccerGameAsync(Guid id)
-        {
-            var currentSoccerGame = await GetSoccerGameAsync(id);
-            var items = await _getAuthorizeSoccerGame.RemoveSoccerGameAsync(currentSoccerGame);
-
-            return new SoccerTeamStateResponse
-            {
-                Id = currentSoccerGame.Id,
-                Items = items,
-                Message = "Soccer game deleted successfully"
-            };
-        }
         public async Task<SoccerTeamStateResponse> DeleteSoccerTeamAsync(Guid id)
         {
             var currentSoccerTeam = await GetSoccerTeamAsync(id);
-            var items = await _getAuthorizeSoccerGame.RemoveSoccerTeamAsync(currentSoccerTeam);
+            var items = await _getAuthorizeSoccerTeam.RemoveSoccerTeamAsync(currentSoccerTeam);
 
             return new SoccerTeamStateResponse
             {
@@ -109,31 +62,21 @@ namespace betting.soccer.scores.api.Domains.UserService.UserPage
                 Items = items,
                 Message = "Soccer Team deleted successfully"
             };
-        }
-        private async Task<SoccerGame> GetSoccerGameAsync(Guid id)
-        {
-            var soccerGame = await _getAuthorizeSoccerGame.GetByIdSoccerGameAsync(id);
-            if (soccerGame == null)
-            {
-                throw new KeyNotFoundException("Soccer game not found");
-            }
-            return soccerGame;
-        }
+        }    
         private async Task<SoccerTeam> GetSoccerTeamAsync(Guid id)
         {
-            var soccerGame = await _getAuthorizeSoccerGame.GetByIdSoccerTeamAsync(id);
+            var soccerGame = await _getAuthorizeSoccerTeam.GetByIdSoccerTeamAsync(id);
             if (soccerGame == null)
             {
                 throw new KeyNotFoundException("Soccer Team not found");
             }
             return soccerGame;
         }
-        public async Task<IList<SoccerTeamRegisterRequest>> GetAllSoccerGameAsync()
+        public async Task<IList<SoccerTeamResponse>> GetAllSoccerGameAsync()
         {
-            var response = await _getAuthorizeSoccerGame.GetAllSoccerGameAsync();
-            var soccerTeam = _mapper.Map<IList<SoccerTeamRegisterRequest>>(response);
+            var response = await _getAuthorizeSoccerTeam.GetAllSoccerTeamAsync();
+            var soccerTeam = _mapper.Map<IList<SoccerTeamResponse>>(response);
             return soccerTeam;
         }
-
     }
 }

@@ -1,8 +1,6 @@
-﻿using betting.soccer.scores.api.Domains;
-
-namespace bettingsoccerscoresapi.Domains.SoccerTeamService.SoccerTeamPage
+﻿namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
 {
-    public class SoccerGame : BaseEntity<Guid>
+    public class SoccerGameResponse
     {
         public string? TeamAId { get; set; }
         public string? TeamBId { get; set; }

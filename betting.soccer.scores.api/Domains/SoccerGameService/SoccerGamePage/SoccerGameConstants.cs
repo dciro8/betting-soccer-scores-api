@@ -1,4 +1,4 @@
-﻿namespace betting.soccer.scores.api.Domains.UserService.UserPage
+﻿namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
 {
     public class SoccerGameConstants
     {
