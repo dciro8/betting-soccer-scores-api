@@ -51,7 +51,7 @@ namespace betting.soccer.scores.api.Domains.UserService.UserPage
                 };
             }
         }
-        public async Task<SoccerTeamStateResponse> RegisterSoccerGameAsync(SoccerGameRegisterRequest model)
+        public async Task<SoccerTeamStateResponse> RegisterSoccerGameAsync(SoccerGameRegisterResponse model)
         {
             try
             {
@@ -73,8 +73,7 @@ namespace betting.soccer.scores.api.Domains.UserService.UserPage
                 };
             }
         }
-
-        public async Task<SoccerTeamStateResponse> UpdateAsync(Guid id, SoccerGameRegisterRequest model)
+        public async Task<SoccerTeamStateResponse> UpdateAsync(Guid id, SoccerGameRegisterResponse model)
         {
             var currentSoccerGame = await GetSoccerGameAsync(id);
             _mapper.Map(model, currentSoccerGame);
@@ -87,7 +86,6 @@ namespace betting.soccer.scores.api.Domains.UserService.UserPage
                 Message = "Soccer game updated successfully"
             };
         }
-
         public async Task<SoccerTeamStateResponse> DeleteSoccerGameAsync(Guid id)
         {
             var currentSoccerGame = await GetSoccerGameAsync(id);
@@ -100,7 +98,6 @@ namespace betting.soccer.scores.api.Domains.UserService.UserPage
                 Message = "Soccer game deleted successfully"
             };
         }
-
         public async Task<SoccerTeamStateResponse> DeleteSoccerTeamAsync(Guid id)
         {
             var currentSoccerTeam = await GetSoccerTeamAsync(id);
@@ -113,8 +110,6 @@ namespace betting.soccer.scores.api.Domains.UserService.UserPage
                 Message = "Soccer Team deleted successfully"
             };
         }
-
-
         private async Task<SoccerGame> GetSoccerGameAsync(Guid id)
         {
             var soccerGame = await _getAuthorizeSoccerGame.GetByIdSoccerGameAsync(id);
@@ -124,7 +119,6 @@ namespace betting.soccer.scores.api.Domains.UserService.UserPage
             }
             return soccerGame;
         }
-
         private async Task<SoccerTeam> GetSoccerTeamAsync(Guid id)
         {
             var soccerGame = await _getAuthorizeSoccerGame.GetByIdSoccerTeamAsync(id);
@@ -134,5 +128,12 @@ namespace betting.soccer.scores.api.Domains.UserService.UserPage
             }
             return soccerGame;
         }
+        public async Task<IList<SoccerTeamRegisterRequest>> GetAllSoccerGameAsync()
+        {
+            var response = await _getAuthorizeSoccerGame.GetAllSoccerGameAsync();
+            var soccerTeam = _mapper.Map<IList<SoccerTeamRegisterRequest>>(response);
+            return soccerTeam;
+        }
+
     }
 }

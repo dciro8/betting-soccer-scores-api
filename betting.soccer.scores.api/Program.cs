@@ -9,6 +9,7 @@ using betting.soccer.scores.api.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
+DataContext _context;
 // Add services to the container.
 {
     var services = builder.Services;
@@ -19,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
     {
         services.AddDbContext<DataContext, SqlServerDataContext>(ServiceLifetime.Transient);
     }
-    
+
     services.AddCors();
     services.AddControllers();
 
@@ -45,19 +46,9 @@ var app = builder.Build();
 // migrate any database changes on startup (includes initial db creation)
 using (var scope = app.Services.CreateScope())
 {
-    var dataContext = scope.ServiceProvider.GetRequiredService <DataContext>();
+    var dataContext = scope.ServiceProvider.GetRequiredService<DataContext>();
     dataContext.Database.Migrate();
     DbInitializer.Initialize(dataContext, builder.Environment);
-    Mocks mocks = new Mocks();
-    try
-    {
-        mocks.MockPreloadedInformation(dataContext);
-        dataContext.Database.CloseConnectionAsync();
-    }
-    catch 
-    {
-    }
-    
 }
 
 // Configure the HTTP request pipeline.

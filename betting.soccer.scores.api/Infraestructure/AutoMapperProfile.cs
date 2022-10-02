@@ -15,11 +15,11 @@ namespace betting.soccer.scores.api.Infraestructure
             // SoccerTeam
             CreateMap<SoccerTeamRegisterRequest, SoccerTeam>();
 
-            CreateMap<SoccerGame, SoccerGameRegisterRequest>();
-            CreateMap<SoccerGameRegisterRequest, SoccerGame>();
+            CreateMap<SoccerGame, SoccerGameRegisterResponse>();
+            CreateMap<SoccerGameRegisterResponse, SoccerGame>();
 
             // UpdateRequest -> SoccerGame
-            CreateMap<SoccerGameRegisterRequest, SoccerGame>()
+            CreateMap<SoccerGameRegisterResponse, SoccerGame>()
                 .ForAllMembers(x => x.Condition(
                     (src, dest, prop) =>
                     {

@@ -12,6 +12,8 @@ namespace betting.soccer.scores.api.Infraestructure
             _next = next;
         }
 
+
+
         public async Task Invoke(HttpContext context)
         {
             try

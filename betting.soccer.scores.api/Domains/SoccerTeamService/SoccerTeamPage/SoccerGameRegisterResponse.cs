@@ -1,6 +1,6 @@
 ﻿namespace betting.soccer.scores.api.Domains.SoccerTeamService.SoccerTeamPage
 {
-    public class SoccerGameRegisterRequest
+    public class SoccerGameRegisterResponse
     {
         public string? TeamAId { get; set; }
         public string? TeamBId { get; set; }

@@ -61,6 +61,9 @@ namespace betting.soccer.scores.api.Mediators.UserService.UserPage
             return await _context.SaveChangesAsync();
         }
 
-        
+        public async Task<IList<SoccerTeam>> GetAllSoccerGameAsync()
+        {
+            return await _context.SoccerTeams.ToListAsync();
+        }
     }
 }

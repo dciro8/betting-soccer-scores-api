@@ -10,5 +10,6 @@ namespace betting.soccer.scores.api.Domains.SoccerTeamService.SoccerTeamPage
         Task<int> UpdateAsync(SoccerGame soccerGame);
         Task<int> RemoveSoccerGameAsync(SoccerGame soccerGame);
         Task<int> RemoveSoccerTeamAsync(SoccerTeam soccerGame);
+        Task<IList<SoccerTeam>> GetAllSoccerGameAsync();
     }
 }

@@ -3,12 +3,33 @@ using betting.soccer.scores.api;
 
 using Xunit;
 using betting.soccer.scores.api.Infraestructure;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace betting.soccer.scores.Tests;
 
 public class ShipmentOrderTest{
     
     DataContext context;
+
+
+    private IConfigurationRoot _configuration;
+
+    // represents database's configuration
+    private DbContextOptions<DataContext> _options;
+
+    public ShipmentOrderTest()
+    {
+        var builder = new ConfigurationBuilder()
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json");
+
+        _configuration = builder.Build();
+        _options = new DbContextOptionsBuilder<DataContext>()
+            .UseSqlServer(_configuration.GetConnectionString("DefaultConnection"))
+            .Options;
+    }
 
     [Fact]
     public void Calculate_Payment_Return_WeightCharge()
