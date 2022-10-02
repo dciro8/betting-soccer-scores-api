@@ -9,5 +9,6 @@ namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
         public DateTime? DateGame { get; set; }
         public byte? ScoreTeamA { get; set; }
         public byte? ScoreTeamB { get; set; }
+        public string? Status { get; set; }
     }
 }

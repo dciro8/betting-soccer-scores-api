@@ -9,5 +9,7 @@ namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
         Task<int> UpdateAsync(SoccerGame soccerGame);
         Task<SoccerGame> GetByIdSoccerGameAsync(Guid id);
         Task<IList<SoccerGame>> GetAllSoccerGameAsync();
+        Task<IList<SoccerGame>> GetListByIdSoccerGameAAsync(Guid team);
+        Task<IList<SoccerGame>> GetListByIdSoccerGameBAsync(Guid team);
     }
 }

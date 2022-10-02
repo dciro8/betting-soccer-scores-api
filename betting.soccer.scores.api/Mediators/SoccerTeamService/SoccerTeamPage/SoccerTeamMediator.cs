@@ -28,6 +28,8 @@ namespace betting.soccer.scores.api.Mediators.UserService.UserPage
         {
             return await _context.SoccerTeams.FindAsync(id);
         }
+
+
         public async Task<int> RemoveSoccerTeamAsync(SoccerTeam soccerTeam)
         {
             _context.SoccerTeams.Remove(soccerTeam);

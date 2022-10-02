@@ -1,5 +1,7 @@
 ﻿using betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage;
 using betting.soccer.scores.api.Infraestructure;
+using bettingsoccerscoresapi.Domains.UserService.UserPage;
+//using System.Data.Entity;
 using Microsoft.EntityFrameworkCore;
 
 namespace betting.soccer.scores.api.Mediators.SoccerGameService.SoccerGamePage
@@ -34,6 +36,15 @@ namespace betting.soccer.scores.api.Mediators.SoccerGameService.SoccerGamePage
         public async Task<IList<SoccerGame>> GetAllSoccerGameAsync()
         {
             return await _context.SoccerGames.ToListAsync();
+        }
+
+        public async Task<IList<SoccerGame>> GetListByIdSoccerGameAAsync(Guid teamA)
+        {
+            return await _context.SoccerGames.Where(id => id.TeamAId == Convert.ToString(teamA)).ToListAsync();
+        }
+        public async Task<IList<SoccerGame>> GetListByIdSoccerGameBAsync(Guid teamB)
+        {
+            return await _context.SoccerGames.Where(id => id.TeamBId == Convert.ToString(teamB)).ToListAsync();
         }
     }
 }

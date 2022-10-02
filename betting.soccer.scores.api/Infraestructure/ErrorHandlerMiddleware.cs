@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.AspNetCore.Http;
+using System.Net;
 using System.Text.Json;
 
 namespace betting.soccer.scores.api.Infraestructure
@@ -11,8 +12,6 @@ namespace betting.soccer.scores.api.Infraestructure
         {
             _next = next;
         }
-
-
 
         public async Task Invoke(HttpContext context)
         {
@@ -41,7 +40,7 @@ namespace betting.soccer.scores.api.Infraestructure
                         break;
                 }
 
-                var result = JsonSerializer.Serialize(new { message = error?.Message });
+                var result = JsonSerializer.Serialize(new { message = error?.Message, statusCode= response.StatusCode, statusText="Error" });
                 await response.WriteAsync(result);
             }
         }

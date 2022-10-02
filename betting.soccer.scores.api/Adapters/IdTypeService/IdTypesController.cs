@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace betting.soccer.scores.api.Adapters.IdTypeService
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class IdTypesController : ControllerBase
     {

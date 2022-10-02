@@ -33,6 +33,7 @@ DataContext _context;
     services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
     // configure DI for application services
     services.AddScoped<IJwtUtils, JwtUtils>();
+
     services.AddScoped<SoccerTeamProcessor>();
     services.AddScoped<ISoccerGame, SoccerGameMediator>();
     services.AddScoped<IRegisterSoccerGame, SoccerGameMediator>();
