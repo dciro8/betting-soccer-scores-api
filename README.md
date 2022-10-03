@@ -2,58 +2,80 @@
 # Prueba Técnica Apuestas en Línea Campeonato Mundial
 
 ## Historias de Usuario
+- US1: Carga de partidos - Implementada
+- US2: Registro de sesión - No implementada
+- US3: Registro de apuestas - No implementada
+- US4: Resultado de apuestas - No implementada
 
-1. Carga de partidos
-  -----------------
-- Tables
------------------
-# SoccerTeam
-  Id: guid
-  Code: string
-  Name: string
+### 1. Carga de partidos
 
+Se necesitan 2 tablas para esta US, una para los equipos precargados y otra que es el maestro de los partidos de futbol que se programan para el día
+
+#### Tablas
+Tabla de Equipos
+```
 SoccerTeam
-  Id: guid
-  Code: string
-  Name: string
------------------
-- DTOs
------------------
-# SoccerGameRegisterRequest
-  GameDate: DateTime
-  TeamAId: Guid
-  TeamBId: Guid
+Id: guid
+Code: string
+Name: string
+```
 
-# SoccerGameUpdateRequest
-  GameDate: DateTime
-  TeamAId: Guid
-  TeamAScore: : byte --> 2
-  TeamBId: Guid
-  TeamBScore: byte   --> 1  
-  Status: Enum       --> Programado / Parcial / Final
+Tabla de almacenamiento 
+```
+SoccerGame
+GameDate: DateTime
+TeamAId: Guid
+TeamAScore: : byte --> ej. 2
+TeamBId: Guid
+TeamBScore: byte   --> ej. 1
+Status: Enum           --> ej. Programado / Parcial / Final
+```
 
-# OperationResponse
-  StatusCode: int    --> 200 / 500 / 400
-  StatusText: string --> Registered / Updated / Error
-  Message: string    --> Null / Error message
+### DTOs
+-----------------
+Mensaje de entrada para el registro de un partido
+```
+SoccerGameRegisterRequest
+GameDate: DateTime
+TeamAId: Guid
+TeamBId: Guid
+```
+Mensaje de entrada para la actualización de un partido
+```
+SoccerGameUpdateRequest
+GameDate: DateTime
+TeamAId: Guid
+TeamAScore: : byte  --> ej. 2
+TeamBId: Guid
+TeamBScore: byte    --> ej. 1
+Status: Enum            --> ej. Programado / Parcial / Final
+```
 
------------------
-- Controllers
------------------
-# SoccerTeam
+Respuesta a las operaciones del controlador
+```
+OperationResponse
+StatusCode: int     --> ej. 200 / 500 / 400
+StatusText: string  --> ej. Registered / Updated / Error
+Message: string    --> Null / Error message
+```
+### Controllers
+
+- SoccerTeam
 GET / --> GetAllSoccerGameAsync
 POST / --> RegisterSoccerTeamAsync
 DELETE/ --> DeleteSoccerTeamAsync
 
-# SoccerGame
+- SoccerGame
 POST / --> Insert
-  # SoccerGameRegisterRequest
+```
+SoccerGameRegisterRequest
   * Validar TeamAId que exista
   * Validar TeamBId que exista
   * Validar cruce de fechas
     1. El TeamAId, TeamBId no tengan otro partido en esa fecha
     2. Que la combinación TeamAId, TeamBId y GateDate no exista
   * Validar que la fecha no sea diferente al día de hoy
+```
 
 PUT / --> Update
   # SoccerGameUpdateRequest
