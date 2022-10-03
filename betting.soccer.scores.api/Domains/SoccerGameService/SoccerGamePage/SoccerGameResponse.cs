@@ -2,7 +2,12 @@
 {
     public class SoccerGameResponse
     {
-        public byte? ScoreTeamA { get; set; }
-        public byte? ScoreTeamB { get; set; }
+        public string? TeamAId { get; set; }
+        public string? TeamBId { get; set; }
+        public DateTime? DateGame { get; set; }
+        public int? ScoreTeamA { get; set; }
+        public int? ScoreTeamB { get; set; }
+        public string? Status { get; set; }
+
     }
 }

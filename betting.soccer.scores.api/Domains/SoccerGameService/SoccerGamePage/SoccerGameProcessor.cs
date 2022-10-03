@@ -137,7 +137,7 @@ namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
 
                     return new SoccerTeamStateResponse
                     {
-                        Message = string.Format(SoccerGameConstants.ProgrammingHappened, soccerTeam1.TeamName, soccerTeam2.TeamName,model.DateGame)
+                        Message = string.Format(SoccerGameConstants.ProgrammingHappened, soccerTeam1.TeamName, soccerTeam2.TeamName, model.DateGame)
                     };
                 }
             }
@@ -157,21 +157,22 @@ namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
 
         }
 
-        public async Task<SoccerTeamStateResponse> RegisterSoccerGameAsync(SoccerGameResponse model)
+        public async Task<SoccerTeamStateResponse> RegisterSoccerGameAsync(SoccerGameResponse game)
         {
             try
             {
                 //Validar TeamAId,TeambId  que exista
-                await existTeams(model);
+                await existTeams(game);
 
-                SoccerTeamStateResponse resultValidate = await ValidateGame(model);
+                SoccerTeamStateResponse resultValidate = await ValidateGame(game);
 
                 if (resultValidate != null && !String.IsNullOrEmpty(resultValidate.Message))
                 {
                     return resultValidate;
                 }
+                game.Status = EnumStateGame.P.ToString();
 
-                var soccerTeam = _mapper.Map<SoccerGame>(model);
+                var soccerTeam = _mapper.Map<SoccerGame>(game);
 
                 var items = await _registerSoccerGame.RegisterSoccerGameAsync(soccerTeam);
 
@@ -213,6 +214,28 @@ namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
         }
         public async Task<SoccerTeamStateResponse> UpdateAsync(Guid id, SoccerGameResponse model)
         {
+            //Validar TeamAId,TeambId  que exista           
+
+            if (model.ScoreTeamA < 0)
+            {
+                var soccerTeam1 = await _soccerTeam.GetByIdSoccerTeamAsync(Guid.Parse(model.TeamAId));                
+
+                return new SoccerTeamStateResponse
+                {
+                    Message = String.Format(SoccerGameConstants.MarkerBeNegative, soccerTeam1.TeamName)
+                };
+            }
+
+            if (model.ScoreTeamB < 0)
+            {
+                var soccerTeam2 = await _soccerTeam.GetByIdSoccerTeamAsync(Guid.Parse(model.TeamBId));
+
+                return new SoccerTeamStateResponse
+                {
+                    Message = String.Format(SoccerGameConstants.MarkerBeNegative, soccerTeam2.TeamName)
+                };
+            }
+
             var currentSoccerGame = await GetSoccerGameAsync(id);
             _mapper.Map(model, currentSoccerGame);
 
