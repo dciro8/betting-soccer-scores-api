@@ -101,7 +101,7 @@ namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
             SoccerTeam soccerTeam2 = new SoccerTeam();
 
             //Exist TeamA
-            if (soccerTeamA.Count > 0)
+            if (soccerTeamA != null && soccerTeamA.Count > 0)
             {
                 if (IsWithinTime(soccerTeamA, model.DateGame.Value))
                 {
@@ -112,11 +112,25 @@ namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
                     return new SoccerTeamStateResponse
                     {
                         Message = string.Format(SoccerGameConstants.GameThatDay, _nameTeam)
+              
                     };
+                }
+                foreach (var teamA in soccerTeamA)
+                {
+                    if (model.TeamAId == teamA.TeamAId && model.TeamBId == teamA.TeamBId && model.DateGame == teamA.DateGame)
+                    {
+                        soccerTeam1 = await _soccerTeam.GetByIdSoccerTeamAsync(Guid.Parse(model.TeamAId));
+                        soccerTeam2 = await _soccerTeam.GetByIdSoccerTeamAsync(Guid.Parse(model.TeamBId));
+
+                        return new SoccerTeamStateResponse
+                        {
+                            Message = string.Format(SoccerGameConstants.ProgrammingHappened, soccerTeam1.TeamName, soccerTeam2.TeamName, model.DateGame)
+                        };
+                    }
                 }
             }
             //Exist TeamB
-            if (soccerTeamB.Count > 0)
+            if (soccerTeamB != null && soccerTeamB.Count > 0)
             {
                 if (IsWithinTime(soccerTeamB, model.DateGame.Value))
                 {
@@ -126,35 +140,19 @@ namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
                         Message = string.Format(SoccerGameConstants.GameThatDay, _nameTeam)
                     };
                 }
-            }
-
-            foreach (var teamA in soccerTeamA)
-            {
-                if (model.TeamAId == teamA.TeamAId && model.TeamBId == teamA.TeamBId && model.DateGame == teamA.DateGame)
+                foreach (var teamB in soccerTeamB)
                 {
-                    soccerTeam1 = await _soccerTeam.GetByIdSoccerTeamAsync(Guid.Parse(model.TeamAId));
-                    soccerTeam2 = await _soccerTeam.GetByIdSoccerTeamAsync(Guid.Parse(model.TeamBId));
-
-                    return new SoccerTeamStateResponse
+                    if (model.TeamAId == teamB.TeamAId && model.TeamBId == teamB.TeamBId && model.DateGame == teamB.DateGame)
                     {
-                        Message = string.Format(SoccerGameConstants.ProgrammingHappened, soccerTeam1.TeamName, soccerTeam2.TeamName, model.DateGame)
-                    };
+                        return new SoccerTeamStateResponse
+                        {
+                            Message = string.Format(SoccerGameConstants.ProgrammingHappened, soccerTeam1.TeamName, soccerTeam2.TeamName, model.DateGame)
+                        };
+                    }
                 }
-            }
 
-            foreach (var teamB in soccerTeamB)
-            {
-                if (model.TeamAId == teamB.TeamAId && model.TeamBId == teamB.TeamBId && model.DateGame == teamB.DateGame)
-                {
-                    return new SoccerTeamStateResponse
-                    {
-                        Message = string.Format(SoccerGameConstants.ProgrammingHappened, soccerTeam1.TeamName, soccerTeam2.TeamName, model.DateGame)
-                    };
-                }
             }
-
             return null;
-
         }
 
         public async Task<SoccerTeamStateResponse> RegisterSoccerGameAsync(SoccerGameResponse game)
@@ -172,13 +170,20 @@ namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
                 }
                 game.Status = EnumStateGame.P.ToString();
 
-                var soccerTeam = _mapper.Map<SoccerGame>(game);
+                //var soccerGame = _mapper.Map<SoccerGame>(game);
 
-                var items = await _registerSoccerGame.RegisterSoccerGameAsync(soccerTeam);
+                SoccerGame soccerGame = new SoccerGame();
+                soccerGame.TeamAId = game.TeamAId;
+                soccerGame.TeamBId = game.TeamBId;
+                soccerGame.DateGame = game.DateGame;
+                soccerGame.ScoreTeamA = byte.Parse( game.ScoreTeamA.ToString());
+                soccerGame.ScoreTeamB = byte.Parse(game.ScoreTeamB.ToString());
+
+                var items = await _registerSoccerGame.RegisterSoccerGameAsync(soccerGame);
 
                 return new SoccerTeamStateResponse
                 {
-                    Id = soccerTeam.Id,
+                    Id = soccerGame.Id,
                     Items = items,
                     Message = SoccerGameConstants.Registration
                 };
@@ -187,6 +192,7 @@ namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
             {
                 return new SoccerTeamStateResponse
                 {
+                    Items= 500,
                     Message = ex.GetBaseException().Message
                 };
             }
