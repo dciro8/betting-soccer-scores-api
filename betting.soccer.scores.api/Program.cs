@@ -17,7 +17,7 @@ DataContext _context;
     var services = builder.Services;
     var env = builder.Environment;
 
-    // Update ASPNETCORE_ENVIRONMENT={Development} to use MySQL
+    // Update ASPNETCORE_ENVIRONMENT={Development} 
     if (env.IsProduction() || env.IsDevelopment())
     {
         services.AddDbContext<DataContext, SqlServerDataContext>(ServiceLifetime.Transient);

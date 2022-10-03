@@ -134,6 +134,9 @@ namespace betting.soccer.scores.api.Domains.SoccerGameService.SoccerGamePage
             {
                 if (IsWithinTime(soccerTeamB, model.DateGame.Value))
                 {
+                    soccerTeam1 = await _soccerTeam.GetByIdSoccerTeamAsync(Guid.Parse(model.TeamAId));
+                    soccerTeam2 = await _soccerTeam.GetByIdSoccerTeamAsync(Guid.Parse(model.TeamBId));
+
                     _nameTeam = string.Concat(soccerTeam1.TeamName, " o ", soccerTeam2.TeamName);
                     return new SoccerTeamStateResponse
                     {

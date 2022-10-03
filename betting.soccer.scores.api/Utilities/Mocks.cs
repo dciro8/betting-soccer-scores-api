@@ -18,12 +18,6 @@ namespace betting.soccer.scores.api.Utilities
             SoccerTeamMediator soccerTeamMediator = new SoccerTeamMediator(dataContext);
             soccerTeamMediator.RegisterSoccerTeamAsync(soccerTeamRegisterRequest);
 
-
-            //dataContext.SoccerTeams.InsertFromQuery()
-            //    db(soccerTeam);
-            //dataContext.SoccerTeams.AddAsync(soccerTeamRegisterRequest);
-            //dataContext.SaveChangesAsync();
-
         }
 
     }
